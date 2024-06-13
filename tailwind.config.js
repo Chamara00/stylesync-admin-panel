@@ -12,6 +12,16 @@ export const theme = {
       '2xl': '1536px',
       '3xl': '1800px',
     },
+    colors: {
+      primary: '#C9A899',
+      secondary: '#844704',
+      font_primary: '#FFFFFF',
+      font_secondary: '#2B2B2B',
+    },
+    fontFamily: {
+      primary: ['"Poppins", sans-serif'],
+    },
   },
 };
+
 export const plugins = [];
