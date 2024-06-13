@@ -24,7 +24,7 @@ const AdminLogin = () => {
           <CustomTextField id="password" name="Password" type="password" />
         </div>
 
-        <CustomButton type="submit" text="Login" fontSize="16px" bold="600" textColor="white" />
+        <CustomButton type="submit" children="Login" fontSize="16px" bold="600" textColor="white" />
       </div>
     </div>
   );
