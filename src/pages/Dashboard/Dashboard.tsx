@@ -28,26 +28,26 @@ const Dashboard = () => {
           <div className="text-[24px] text-font_secondary font-[500] py-4">Notifications</div>
           {/* Add notification items here */}
           <div>
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Jsut now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
+            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
           </div>
         </div>
       </div>
