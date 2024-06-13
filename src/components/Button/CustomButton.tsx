@@ -7,40 +7,53 @@ interface Props {
   bold?: string;
   width?: string;
   fontSize: string;
-  text: string;
+  children: React.ReactNode;
   className?: string;
+  border?: string;
+  hoverColor?: string;
+  onClick?: () => void;
 }
 
-export default function CustomButton({
+const CustomButton: React.FC<Props> = ({
   type = 'button',
   buttonColor = '#844704',
+  hoverColor = '#3A1F02',
   textColor = '#FFF',
   bold = '500',
   width,
   fontSize,
-  text,
+  children,
   className = 'py-2 px-4 w-full',
-}: Props) {
+  border = 'none',
+  onClick,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const baseStyle = {
     borderRadius: '12px',
-    backgroundColor: isHovered ? '#3A1F02' : buttonColor, // Change color on hover
+    backgroundColor: isHovered ? hoverColor : buttonColor,
     color: textColor,
     fontWeight: bold,
     width: width,
     fontSize: fontSize,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: border,
   };
 
   return (
     <button
+      onClick={onClick}
       type={type}
       className={className}
       style={baseStyle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {text}
+      {children}
     </button>
   );
-}
+};
+
+export default CustomButton;
