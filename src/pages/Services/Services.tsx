@@ -2,9 +2,19 @@ import React, { useState } from 'react';
 import { CustomButton, CustomTextArea } from '../../components/components';
 import { deleteIcon, editIcon, plusICon } from '../../assets/icons/icons';
 import { SERVICE_DATA } from '../../const/DummyData';
+import DeleteDialogBox from '../../components/DialogBox/DeleteDialogBox';
 
 const Services = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const handleDialogOpen = () => {
+    setDeleteOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDeleteOpen(false);
+  };
 
   return (
     <div className="w-full h-screen overflow-auto">
@@ -63,7 +73,7 @@ const Services = () => {
                 Service type
               </th>
               <th scope="col" className="px-6 py-3">
-                Price
+                Price (Rs.)
               </th>
               <th scope="col" className="px-6 py-3">
                 Duration
@@ -84,13 +94,20 @@ const Services = () => {
                 <td className="px-6 py-4">{item.duration}</td>
                 <td className="px-6 py-4 text-right flex justify-start items-center gap-2">
                   <img src={editIcon} alt="edit icon" />
-                  <img src={deleteIcon} alt="delete icon" />
+                  <img src={deleteIcon} alt="delete icon" onClick={handleDialogOpen} />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <DeleteDialogBox
+        open={deleteOpen}
+        handleClose={handleDialogClose}
+        title="Delete service"
+        text="You can't undo after delete. Are you sure, you want delete ?"
+        buttonText="Save"
+      />
     </div>
   );
 };
