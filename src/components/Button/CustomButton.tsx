@@ -6,6 +6,7 @@ interface Props {
   textColor?: string;
   bold?: string;
   width?: string;
+  height?: string;
   fontSize: string;
   children: React.ReactNode;
   className?: string;
@@ -21,6 +22,7 @@ const CustomButton: React.FC<Props> = ({
   textColor = '#FFF',
   bold = '500',
   width,
+  height,
   fontSize,
   children,
   className = 'py-2 px-4 w-full',
@@ -35,6 +37,7 @@ const CustomButton: React.FC<Props> = ({
     color: textColor,
     fontWeight: bold,
     width: width,
+    height: height,
     fontSize: fontSize,
     display: 'flex',
     alignItems: 'center',

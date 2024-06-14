@@ -43,10 +43,10 @@ export const SIDEBAR_BOTTOM_LINKS = [
     path: '/admin/dashboard/settings',
     icon: <IoIosSettings />,
   },
-  {
-    key: 'chat_support',
-    label: 'Support and chat',
-    path: '/admin/dashboard/chat_support',
-    icon: <IoIosSettings />,
-  },
+  // {
+  //   key: 'chat_support',
+  //   label: 'Support and chat',
+  //   path: '/admin/dashboard/chat_support',
+  //   icon: <IoIosSettings />,
+  // },
 ];

@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
-import { CustomButton, CustomTextArea } from '../../components/components';
+import { CustomButton, CustomTextArea, DeleteDialogBox, UpdateDialogBox } from '../../components/components';
 import { deleteIcon, editIcon, plusICon } from '../../assets/icons/icons';
 import { SERVICE_DATA } from '../../const/DummyData';
-import DeleteDialogBox from '../../components/DialogBox/DeleteDialogBox';
 
 const Services = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
 
-  const handleDialogOpen = () => {
+  const handleDeleteOpen = () => {
     setDeleteOpen(true);
   };
 
-  const handleDialogClose = () => {
+  const handleDeleteClose = () => {
     setDeleteOpen(false);
+  };
+
+  const handleUpdateOpen = () => {
+    setUpdateOpen(true);
+  };
+
+  const handleUpdateClose = () => {
+    setUpdateOpen(false);
   };
 
   return (
@@ -60,7 +68,7 @@ const Services = () => {
       </div>
       <div className="pb-10">
         <div className="text-[16px] text-font_secondary font-normal pb-4">List of all services available</div>
-        <table className="w-full text-sm text-left  text-font_secondary">
+        <table className="w-[90%] text-sm text-left  text-font_secondary">
           <thead className="text-sm text-font_primary uppercase bg-secondary">
             <tr>
               <th scope="col" className="px-6 py-3">
@@ -93,8 +101,8 @@ const Services = () => {
                 <td className="px-6 py-4">{item.price}</td>
                 <td className="px-6 py-4">{item.duration}</td>
                 <td className="px-6 py-4 text-right flex justify-start items-center gap-2">
-                  <img src={editIcon} alt="edit icon" />
-                  <img src={deleteIcon} alt="delete icon" onClick={handleDialogOpen} />
+                  <img src={editIcon} alt="edit icon" className="cursor-pointer" onClick={handleUpdateOpen} />
+                  <img src={deleteIcon} alt="delete icon" onClick={handleDeleteOpen} className="cursor-pointer" />
                 </td>
               </tr>
             ))}
@@ -103,10 +111,40 @@ const Services = () => {
       </div>
       <DeleteDialogBox
         open={deleteOpen}
-        handleClose={handleDialogClose}
+        handleClose={handleDeleteClose}
         title="Delete service"
         text="You can't undo after delete. Are you sure, you want delete ?"
+        buttonText="Delete"
+      />
+      <UpdateDialogBox
+        open={updateOpen}
+        handleClose={handleUpdateClose}
+        title="Update service"
         buttonText="Save"
+        children={
+          <>
+            <div className="flex justify-start items-center gap-4 py-2">
+              <CustomTextArea
+                id="service_name"
+                type="text"
+                name="service_name"
+                width="200px"
+                text="Edit Service name"
+              />
+              <CustomTextArea
+                id="service_type"
+                type="text"
+                name="service_type"
+                width="200px"
+                text="Edit Service type"
+              />
+            </div>
+            <div className="flex justify-start items-center gap-4 py-2">
+              <CustomTextArea id="price" type="number" name="price" width="200px" text="Edit Price" />
+              <CustomTextArea id="duration" type="text" name="duration" width="200px" text="Edit Duration" />
+            </div>
+          </>
+        }
       />
     </div>
   );

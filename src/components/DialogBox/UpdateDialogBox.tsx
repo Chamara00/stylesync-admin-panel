@@ -7,11 +7,11 @@ interface Props {
   open: boolean;
   handleClose: () => void;
   title: string;
-  text: string;
+  children: React.ReactNode;
   buttonText: string;
 }
 
-export default function DeleteDialogBox({ open, handleClose, title, text, buttonText }: Props) {
+export default function UpdateDialogBox({ open, handleClose, title, children, buttonText }: Props) {
   return (
     <React.Fragment>
       <Dialog
@@ -24,7 +24,7 @@ export default function DeleteDialogBox({ open, handleClose, title, text, button
           {title}
         </div>
 
-        <div className="font-normal text-[12px] text-gray-500 px-4 pb-4">{text}</div>
+        <div className="font-normal text-[12px] text-gray-500 px-4 pb-4">{children}</div>
         <DialogActions>
           <CustomButton
             width="80px"
