@@ -22,12 +22,6 @@ export const SIDEBAR_LINKS = [
     path: '/admin/dashboard/customers',
     icon: <IoIosPerson />,
   },
-  // {
-  //   key: 'appointment',
-  //   label: 'Appointments',
-  //   path: '/admin/dashboard/appointments',
-  //   icon: <GrNotes />,
-  // },
   {
     key: 'services',
     label: 'Services',

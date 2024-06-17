@@ -59,7 +59,7 @@ export default Dashboard;
 
 type StatusCardProps = {
   title: string;
-  count: number;
+  count: number | null;
 };
 
 const StatusCard = ({ title, count }: StatusCardProps) => {
