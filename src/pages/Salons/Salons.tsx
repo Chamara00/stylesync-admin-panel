@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import { SALON_DATA } from '../../const/DummyData';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store/store';
+import { getAllSalons } from '../../redux/features/admin/salons/salonSlice';
 
 const Salons = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const salonState = useSelector((state: RootState) => state.admin.salons);
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 8;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const records = SALON_DATA.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(SALON_DATA.length / recordsPerPage);
+  const currentRecords = salonState.salons.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(salonState.salons.length / recordsPerPage);
   const numbers = [...Array(nPage + 1).keys()].slice(1);
+
+  useEffect(() => {
+    dispatch(getAllSalons());
+  }, [dispatch]);
 
   function prePage() {
     if (currentPage !== firstIndex) {
@@ -56,7 +64,7 @@ const Salons = () => {
             </tr>
           </thead>
           <tbody>
-            {records.map((item) => (
+            {currentRecords.slice(firstIndex, lastIndex).map((item) => (
               <tr key={item.id} className="bg-white border-b  hover:bg-gray-50 ">
                 <td className="px-6 py-4">{item.id}</td>
                 <td className="px-6 py-4">{item.name}</td>

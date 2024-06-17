@@ -16,8 +16,8 @@ export interface Salon {
   otp?: string;
   emailVerified?: boolean;
   article?: Article[];
-  review: Review[]; // Assuming Review is another model you have defined
-  salonStaff: Staff[];
+  review?: Review[];
+  salonStaff?: Staff[];
 }
 
 export interface Article {
@@ -70,8 +70,7 @@ const salonSlice = createSlice({
       })
       .addCase(getAllSalons.fulfilled, (state, action) => {
         state.loading = false;
-        state.salons = action.payload.salons;
-        NotificationController.success(action.payload.message);
+        state.salons = action.payload;
       })
       .addCase(getAllSalons.rejected, (state, action) => {
         state.loading = false;
@@ -118,14 +117,18 @@ const salonSlice = createSlice({
 
 export default salonSlice.reducer;
 
-export const getAllSalons = createAsyncThunk('salons/get-all-salons', async (userDate: object, { rejectWithValue }) => {
-  try {
-    const response = await axiosInstance.get('/admin/salons');
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(handleAxiosError(error));
-  }
-});
+export const getAllSalons = createAsyncThunk<Salon[], void, { rejectValue: string }>(
+  '/admin/dashboard/salons',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/salons/get-all-salons');
+      console.log('fetched all salons');
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(handleAxiosError(error));
+    }
+  },
+);
 
 export const getSalonById = createAsyncThunk('salons/get-salon-by-id/:id', async (salon_id: number) => {
   try {
@@ -139,9 +142,9 @@ export const getSalonById = createAsyncThunk('salons/get-salon-by-id/:id', async
   }
 });
 
-export const getSalonCount = createAsyncThunk('salons/get-salon-count', async () => {
+export const getSalonCount = createAsyncThunk('/admin/dashboard/salon-count', async () => {
   try {
-    const response = await axiosInstance.get('/admin/salons/count');
+    const response = await axiosInstance.get('/salons/get-salon-count');
     console.log('fetched salon count');
     console.log(response);
     return response.data;

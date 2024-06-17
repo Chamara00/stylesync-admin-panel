@@ -17,11 +17,11 @@ const AdminLogin = () => {
 
         <div className="mb-4">
           <p className="block text-font_secondary mb-2">Email</p>
-          <CustomTextField id="email" name="Email" type="text" />
+          <CustomTextField id="email" name="Email" />
         </div>
         <div className="mb-6">
           <p className="block text-font_secondary mb-2">Password</p>
-          <CustomTextField id="password" name="Password" type="password" />
+          <CustomTextField id="password" name="Password" />
         </div>
 
         <CustomButton type="submit" children="Login" fontSize="16px" bold="600" textColor="white" />

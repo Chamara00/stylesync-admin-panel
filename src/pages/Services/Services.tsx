@@ -1,20 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomTextArea, DeleteDialogBox, UpdateDialogBox } from '../../components/components';
 import { deleteIcon, editIcon, plusICon } from '../../assets/icons/icons';
-import { SERVICE_DATA } from '../../const/DummyData';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store/store';
+import { getAllServices, createService, deleteService } from '../../redux/features/admin/service/serviceSlice';
 
 const Services = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const serviceState = useSelector((state: RootState) => state.admin.services);
+
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
+
+  const service_id = 13;
+
+  const [formData, setFormData] = useState({
+    name: '',
+    serviceType: '',
+    price: 0,
+    duration: '',
+  });
+
+  useEffect(() => {
+    dispatch(getAllServices());
+  }, [dispatch]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: name === 'price' ? parseInt(value) : value,
+    });
+  };
+
+  const handleSubmit = () => {
+    dispatch(createService(formData));
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteService(service_id));
+  };
 
   const handleDeleteOpen = () => {
     setDeleteOpen(true);
   };
 
-  const handleDeleteClose = () => {
-    setDeleteOpen(false);
-  };
+  // const handleDeleteClose = () => {
+  //   setDeleteOpen(false);
+  // };
 
   const handleUpdateOpen = () => {
     setUpdateOpen(true);
@@ -29,18 +63,25 @@ const Services = () => {
       <div className="text-[36px] text-font_secondary font-bold">Services</div>
       <div className="border-t border-[#C2C2C2]" />
       <div className="py-4 w-full flex-col justify-start items-center">
-        <CustomButton width="200px" fontSize="16px" onClick={() => setIsFormVisible(true)}>
+        <CustomButton width="200px" fontSize="16px" onClick={() => setIsFormVisible(!isFormVisible)}>
           <img src={plusICon} alt="Plus icon" width={20} height={20} className="pr-2" /> Add new service
         </CustomButton>
+
         {isFormVisible && (
           <>
             <div className="flex justify-start items-center gap-4 py-2">
-              <CustomTextArea id="service_name" type="text" name="service_name" width="400px" text="Service name" />
-              <CustomTextArea id="service_type" type="text" name="service_type" width="400px" text="Service type" />
+              <CustomTextArea id="service_name" name="name" width="400px" text="Service name" onChange={handleChange} />
+              <CustomTextArea
+                id="service_type"
+                name="serviceType"
+                width="400px"
+                text="Service type"
+                onChange={handleChange}
+              />
             </div>
             <div className="flex justify-start items-center gap-4 py-2">
-              <CustomTextArea id="price" type="number" name="price" width="400px" text="Price" />
-              <CustomTextArea id="duration" type="text" name="duration" width="400px" text="Duration" />
+              <CustomTextArea id="price" name="price" width="400px" text="Price" onChange={handleChange} />
+              <CustomTextArea id="duration" name="duration" width="400px" text="Duration" onChange={handleChange} />
             </div>
             <div className="py-2 text-gray-500 font-light text-[12px] flex justify-start items-center">
               Note: Salons can change the price and duration
@@ -57,7 +98,8 @@ const Services = () => {
               >
                 Cancel
               </CustomButton>
-              <CustomButton width="150px" fontSize="16px">
+
+              <CustomButton width="150px" fontSize="16px" onClick={handleSubmit}>
                 Submit
               </CustomButton>
             </div>
@@ -93,11 +135,11 @@ const Services = () => {
             </tr>
           </thead>
           <tbody>
-            {SERVICE_DATA.map((item) => (
+            {serviceState.services.map((item) => (
               <tr key={item.id} className="bg-white border-b  hover:bg-gray-50 ">
                 <td className="px-6 py-4">{item.id}</td>
                 <td className="px-6 py-4">{item.name}</td>
-                <td className="px-6 py-4">{item.type}</td>
+                <td className="px-6 py-4">{item.serviceType}</td>
                 <td className="px-6 py-4">{item.price}</td>
                 <td className="px-6 py-4">{item.duration}</td>
                 <td className="px-6 py-4 text-right flex justify-start items-center gap-2">
@@ -111,7 +153,7 @@ const Services = () => {
       </div>
       <DeleteDialogBox
         open={deleteOpen}
-        handleClose={handleDeleteClose}
+        onClick={handleDelete}
         title="Delete service"
         text="You can't undo after delete. Are you sure, you want delete ?"
         buttonText="Delete"
@@ -124,24 +166,12 @@ const Services = () => {
         children={
           <>
             <div className="flex justify-start items-center gap-4 py-2">
-              <CustomTextArea
-                id="service_name"
-                type="text"
-                name="service_name"
-                width="200px"
-                text="Edit Service name"
-              />
-              <CustomTextArea
-                id="service_type"
-                type="text"
-                name="service_type"
-                width="200px"
-                text="Edit Service type"
-              />
+              <CustomTextArea id="service_name" name="service_name" width="200px" text="Edit Service name" />
+              <CustomTextArea id="service_type" name="service_type" width="200px" text="Edit Service type" />
             </div>
             <div className="flex justify-start items-center gap-4 py-2">
-              <CustomTextArea id="price" type="number" name="price" width="200px" text="Edit Price" />
-              <CustomTextArea id="duration" type="text" name="duration" width="200px" text="Edit Duration" />
+              <CustomTextArea id="price" name="price" width="200px" text="Edit Price" />
+              <CustomTextArea id="duration" name="duration" width="200px" text="Edit Duration" />
             </div>
           </>
         }

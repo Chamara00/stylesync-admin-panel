@@ -1,22 +1,23 @@
+import { TextField } from '@mui/material';
 import React from 'react';
 
 interface Props {
-  type: string;
   id: string;
   name: string;
   width?: string;
   autocomplete?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }
 
-export default function CustomTextField({ type, id, name, autocomplete = 'off', width }: Props) {
+export default function CustomTextField({ id, name, autocomplete = 'off', width, onChange }: Props) {
   return (
-    <input
-      type={type}
+    <TextField
       id={id}
-      name={name}
-      style={{ width: width }}
-      className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-secondary"
       autoComplete={autocomplete}
+      style={{ width: width }}
+      name={name}
+      onChange={onChange}
+      size="small"
     />
   );
 }
