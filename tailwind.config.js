@@ -14,12 +14,13 @@ export const theme = {
     },
     colors: {
       primary: '#C9A899',
-      secondary: '#844704',
+      secondary: '#2e2528',
       font_primary: '#FFFFFF',
       font_secondary: '#2B2B2B',
     },
     fontFamily: {
-      primary: ['"Poppins", sans-serif'],
+      League: ['League Spartan', 'monospace'],
+      Roboto: ['Roboto', 'sans-serif'],
     },
   },
 };

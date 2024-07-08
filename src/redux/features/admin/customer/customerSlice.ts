@@ -18,14 +18,14 @@ export interface CustomerAppointmentBlock {
   startTime: string;
   staffId: number;
   isCancel: boolean;
+  formattedDate: string;
 }
 
 export interface CustomerState {
   customers: Customer[];
-  //id: number;
-  // name: string;
-  // email: string;
-  // gender: string;
+  selectedCustomer: Customer | null;
+  appointments: CustomerAppointmentBlock[] | null;
+  reviews: Review[] | null;
   loading: boolean;
   message: string | null;
   error: boolean;
@@ -33,10 +33,9 @@ export interface CustomerState {
 
 const initialState: CustomerState = {
   customers: [],
-  //id: 0,
-  // name: '',
-  // email: '',
-  // gender: '',
+  selectedCustomer: null,
+  appointments: null,
+  reviews: null,
   loading: false,
   message: null,
   error: false,
@@ -61,6 +60,31 @@ const customerSlice = createSlice({
         state.error = true;
 
         NotificationController.error('Loading data failed');
+      })
+      //get customer by id
+      .addCase(getCustomerById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getCustomerById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedCustomer = action.payload;
+      })
+      .addCase(getCustomerById.rejected, (state) => {
+        state.loading = false;
+        NotificationController.error('Customer loading failed');
+      })
+
+      // delete customer
+      .addCase(deleteCustomer.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteCustomer.fulfilled, (state, action) => {
+        state.loading = false;
+        state.customers = action.payload;
+      })
+      .addCase(deleteCustomer.rejected, (state) => {
+        state.loading = false;
+        NotificationController.error('Customer deletion failed');
       });
   },
 });
@@ -84,7 +108,8 @@ export const getAllCustomers = createAsyncThunk<Customer[], void, { rejectValue:
 
 export const getCustomerById = createAsyncThunk('customer/getcustomer-by-id/:id', async (customer_id: number) => {
   try {
-    const response = await axiosInstance.get(`/admin/dashboard/customers/${customer_id}`);
+    //const response = await axiosInstance.get(`/admin/dashboard/customers/${customer_id}`);
+    const response = await axiosInstance.get(`/customer/getcustomer-by-id/${customer_id}`);
     console.log('fetch customer by id');
     console.log(response);
     return response.data;
@@ -93,6 +118,20 @@ export const getCustomerById = createAsyncThunk('customer/getcustomer-by-id/:id'
     throw new Error(errorMessage);
   }
 });
+
+export const deleteCustomer = createAsyncThunk<Customer[], number, { rejectValue: string }>(
+  '/admin/dashboard/customers/delete',
+  async (customer_id: number) => {
+    try {
+      const response = await axiosInstance.delete(`/customer/delete-customer/${customer_id}`);
+      console.log('delete customer');
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return handleAxiosError(error);
+    }
+  },
+);
 
 export const getCustomerCount = createAsyncThunk('customer/get-customer-count', async () => {
   try {

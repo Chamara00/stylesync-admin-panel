@@ -1,46 +1,51 @@
-import { RxDashboard } from 'react-icons/rx';
-import { FaScissors } from 'react-icons/fa6';
-import { IoIosPerson, IoIosSettings } from 'react-icons/io';
+import {
+  IconMenuDeep,
+  IconLayoutDashboard,
+  IconPerfume,
+  IconAffiliate,
+  IconUser,
+  IconSettings,
+} from '@tabler/icons-react';
 import React from 'react';
 
 export const SIDEBAR_LINKS = [
   {
+    key: 'menu',
+    label: 'Menu',
+    path: '/admin/dashboard/',
+    icon: <IconMenuDeep />,
+  },
+  {
     key: 'dashboard',
     label: 'Dashboard',
     path: '/admin/dashboard',
-    icon: <RxDashboard />,
+    icon: <IconLayoutDashboard />,
   },
   {
     key: 'salons',
     label: 'Salons',
     path: '/admin/dashboard/salons',
-    icon: <FaScissors />,
+    icon: <IconPerfume />,
   },
   {
     key: 'customers',
     label: 'Customers',
     path: '/admin/dashboard/customers',
-    icon: <IoIosPerson />,
+    icon: <IconUser />,
   },
   {
     key: 'services',
     label: 'Services',
     path: '/admin/dashboard/services',
-    icon: <IoIosSettings />,
+    icon: <IconAffiliate />,
   },
 ];
 
 export const SIDEBAR_BOTTOM_LINKS = [
   {
     key: 'settings',
-    label: 'System Settings',
+    label: 'Settings',
     path: '/admin/dashboard/settings',
-    icon: <IoIosSettings />,
+    icon: <IconSettings />,
   },
-  // {
-  //   key: 'chat_support',
-  //   label: 'Support and chat',
-  //   path: '/admin/dashboard/chat_support',
-  //   icon: <IoIosSettings />,
-  // },
 ];

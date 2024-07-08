@@ -1,22 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store/store';
-import { getAllSalons } from '../../redux/features/admin/salons/salonSlice';
+import { useNavigate } from 'react-router-dom';
+import { getAllSalons, Salon } from '../../api/salonApi';
+import { CircularProgress } from '@mui/material';
 
-const Salons = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const salonState = useSelector((state: RootState) => state.admin.salons);
+const Salons: React.FC = () => {
+  const navigate = useNavigate();
+  const [salons, setSalons] = useState<Salon[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 8;
-  const lastIndex = currentPage * recordsPerPage;
-  const firstIndex = lastIndex - recordsPerPage;
-  const currentRecords = salonState.salons.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(salonState.salons.length / recordsPerPage);
-  const numbers = [...Array(nPage + 1).keys()].slice(1);
 
   useEffect(() => {
-    dispatch(getAllSalons());
-  }, [dispatch]);
+    const getSalons = async () => {
+      try {
+        setLoading(true);
+        const salonsData = await getAllSalons();
+        setSalons(salonsData);
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getSalons();
+  }, []);
+
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const currentRecords = salons?.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(salons ? salons.length : 0 / recordsPerPage);
+
+  const numbers = [...Array(nPage + 1).keys()].slice(1);
 
   function prePage() {
     if (currentPage !== firstIndex) {
@@ -34,13 +51,29 @@ const Salons = () => {
     setCurrentPage(id);
   }
 
+  const handleRowClick = (salonId: number) => {
+    navigate(`/admin/dashboard/salons/${salonId}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center w-full min-h-screen">
+        <CircularProgress color="inherit" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div className="w-full h-screen overflow-auto">
       <div className="text-[36px] text-font_secondary font-bold">Salons</div>
       <div className="border-t border-[#C2C2C2]" />
       <div className="text-[16px] text-font_secondary font-normal py-4">List of all salons available</div>
       <div>
-        <table className="w-full text-sm text-left  text-font_secondary">
+        <table className="w-[80%] text-sm text-left  text-font_secondary">
           <thead className="text-sm text-font_primary uppercase bg-secondary ">
             <tr>
               <th scope="col" className="px-6 py-3">
@@ -58,24 +91,20 @@ const Salons = () => {
               <th scope="col" className="px-6 py-3">
                 City
               </th>
-              <th scope="col" className="px-6 py-3">
-                <span className="sr-only">Edit</span>
-              </th>
             </tr>
           </thead>
           <tbody>
             {currentRecords.slice(firstIndex, lastIndex).map((item) => (
-              <tr key={item.id} className="bg-white border-b  hover:bg-gray-50 ">
+              <tr
+                key={item.id}
+                className="bg-white border-b  hover:bg-gray-50 "
+                onClick={() => handleRowClick(item.id)}
+              >
                 <td className="px-6 py-4">{item.id}</td>
                 <td className="px-6 py-4">{item.name}</td>
                 <td className="px-6 py-4">{item.email}</td>
                 <td className="px-6 py-4">{item.contactNo}</td>
                 <td className="px-6 py-4">{item.city}</td>
-                <td className="px-6 py-4 text-right">
-                  <a href="#" className="text-xs font-small text-secondary hover:underline">
-                    Show
-                  </a>
-                </td>
               </tr>
             ))}
           </tbody>
