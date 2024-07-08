@@ -4,6 +4,7 @@ import { deleteIcon, editIcon, plusICon } from '../../assets/icons/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store/store';
 import { getAllServices, createService, deleteService } from '../../redux/features/admin/service/serviceSlice';
+import withLoader from '../../components/Animation/WithLoader';
 
 const Services = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -180,4 +181,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default withLoader(Services);

@@ -7,9 +7,19 @@ interface Props {
   width?: string;
   autocomplete?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  disabled?: boolean;
+  value?: string;
 }
 
-export default function CustomTextField({ id, name, autocomplete = 'off', width, onChange }: Props) {
+export default function CustomTextField({
+  id,
+  name,
+  autocomplete = 'off',
+  width,
+  onChange,
+  disabled = false,
+  value = '',
+}: Props) {
   return (
     <TextField
       id={id}
@@ -18,6 +28,8 @@ export default function CustomTextField({ id, name, autocomplete = 'off', width,
       name={name}
       onChange={onChange}
       size="small"
+      disabled={disabled}
+      defaultValue={value}
     />
   );
 }

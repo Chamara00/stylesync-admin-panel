@@ -2,8 +2,8 @@ import axios, { AxiosError } from 'axios';
 
 export const axiosInstance = axios.create({
   //baseURL: process.env.ADMIN_PANEL_API_BASE_URL,
-  baseURL: 'http://localhost:8000/admin',
-  //baseURL: 'https://stylesync-backend-test.onrender.com/admin/',
+  //baseURL: 'http://localhost:8000/admin',
+  baseURL: 'https://stylesync-backend-test.onrender.com/admin/',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
