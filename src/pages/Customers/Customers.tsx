@@ -67,7 +67,7 @@ const Customers = () => {
   }
 
   return (
-    <div className="w-full h-screen overflow-auto">
+    <div className="w-full h-screen overflow-auto px-10 py-6">
       <div className="text-[36px] text-font_secondary font-bold">Customers</div>
       <div className="border-t border-[#C2C2C2]" />
       <div className="text-[16px] text-font_secondary font-normal py-4">List of all customers available</div>
@@ -89,7 +89,7 @@ const Customers = () => {
           </tr>
         </thead>
         <tbody>
-          {currentRecords.slice(firstIndex, lastIndex).map((item) => (
+          {currentRecords.map((item) => (
             <tr key={item.id} className="bg-white border-b hover:bg-gray-50" onClick={() => handleRowClick(item.id)}>
               <td className="px-6 py-4">{item.id}</td>
               <td className="px-6 py-4">{item.name}</td>

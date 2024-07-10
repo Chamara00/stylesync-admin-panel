@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomTextArea, TitleText } from '../../components/components';
 //import withLoader from '../../components/Animation/WithLoader';
 import { useParams } from 'react-router-dom';
-import { getSalonById, Salon } from '../../api/salonApi';
+import { getSalonById, Salon, SalonStaff } from '../../api/salonApi';
 import { CircularProgress } from '@mui/material';
+import { FaStar } from 'react-icons/fa6';
 
 const ViewSalon = () => {
   const { id } = useParams<{ id: string }>();
@@ -42,16 +43,27 @@ const ViewSalon = () => {
   }
 
   return (
-    <div className="w-full h-screen overflow-auto">
+    <div className="w-full h-screen overflow-auto px-10 py-6">
       <div className="text-[36px] text-font_secondary font-bold">Salon profile</div>
       <div className="border-t border-[#C2C2C2] mb-6" />
+
       <div className="flex justify-between items-center">
         <TitleText text="Salon details" />
         <CustomButton width="150px" fontSize="16px">
           Delete profile
         </CustomButton>
       </div>
+
+      <div className="w-[150px] rounded-md">
+        <img
+          src={salon?.image ? salon.image : 'https://via.placeholder.com/150'}
+          alt=""
+          className="w-full rounded-md"
+        />
+      </div>
+
       <div className="flex justify-start items-center gap-4 py-2">
+        <CustomTextArea id="id" name="id" width="100px" text="Salon ID" disabled={true} value={salon?.id} />
         <CustomTextArea id="name" name="name" width="300px" text="Salon name" disabled={true} value={salon?.name} />
         <CustomTextArea id="email" name="email" width="300px" text="Email" disabled={true} value={salon?.email} />
         <CustomTextArea
@@ -77,6 +89,68 @@ const ViewSalon = () => {
           value={salon?.country}
         />
       </div>
+      <div className="border-t border-[#C2C2C2] my-6" />
+
+      {/* Salon Staff Details */}
+      <TitleText text="Salon staff details" />
+      <div className="flex flex-col gap-4 py-2">
+        {salon?.salonStaff.map((salonStaff: SalonStaff) => (
+          <div
+            key={salonStaff.staff.id}
+            className="border rounded-lg p-4 flex flex-row justify-between items-center w-[60%]"
+          >
+            <div>{salonStaff.staff.id}</div>
+            <div className="font-bold">{salonStaff.staff.name}</div>
+            <div>{salonStaff.staff.gender}</div>
+            <div className="w-[100px] rounded-md">
+              <img
+                src={salonStaff.staff.image ? salonStaff.staff.image : 'https://via.placeholder.com/150'}
+                alt=""
+                className="w-full rounded-md"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="border-t border-[#C2C2C2] my-6" />
+
+      {/* Customer reviews */}
+      <TitleText text="Customer reviews" />
+      {salon?.review?.length ? (
+        <table className="w-[80%] text-sm text-left text-font_secondary mt-4">
+          <thead className="text-sm text-font_secondary uppercase ">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Salon name
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Review
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Date
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Time
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {salon?.review.map((item, index) => (
+              <tr key={`${item.salonId}-${index}`} className="bg-white border-b hover:bg-gray-50">
+                <td className="px-6 py-4">{item.salonId}</td>
+                <td className="px-6 py-4 flex gap-1 items-center">
+                  {item.value} <FaStar color="#FFD700" scale={1.2} />
+                </td>
+                <td className="px-6 py-4">{new Date(item.date).toLocaleDateString()}</td>
+                <td className="px-6 py-4">{item.time}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="text-font_secondary">No records</div>
+      )}
       <div className="border-t border-[#C2C2C2] my-6" />
     </div>
   );
