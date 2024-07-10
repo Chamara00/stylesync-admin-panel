@@ -10,9 +10,16 @@ export interface Service {
   duration: number;
 }
 
-export const createService = async (serviceData: Service) => {
+export interface NewService {
+  name: string;
+  serviceType: string;
+  price: number;
+  duration: string;
+}
+
+export const createService = async (serviceData: NewService) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/salons/get-all-salons`, serviceData);
+    const response = await axios.post(`${API_BASE_URL}/services/create-service`, serviceData);
     return response.data;
   } catch (error) {
     console.error('Error creating service:', error);
@@ -22,7 +29,7 @@ export const createService = async (serviceData: Service) => {
 
 export const getAllServices = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/salons/get-all-salons`);
+    const response = await axios.get(`${API_BASE_URL}/services/get-all-services`);
     return response.data;
   } catch (error) {
     console.error('Error fetching services:', error);
@@ -32,7 +39,7 @@ export const getAllServices = async () => {
 
 export const getServiceById = async (id: number) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/salons/get-salon-by-id/${id}`);
+    const response = await axios.get(`${API_BASE_URL}/services/get-service-by-id/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching service by ID:', error);
@@ -42,7 +49,7 @@ export const getServiceById = async (id: number) => {
 
 export const updateService = async (id: number, serviceData: Service) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}/services/${id}`, serviceData);
+    const response = await axios.put(`${API_BASE_URL}/services/update-service/${id}`, serviceData);
     return response.data;
   } catch (error) {
     console.error('Error updating service:', error);
@@ -52,7 +59,7 @@ export const updateService = async (id: number, serviceData: Service) => {
 
 export const deleteService = async (id: number) => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/admin/services/${id}`);
+    const response = await axios.delete(`${API_BASE_URL}/services/delete-service/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting service:', error);
@@ -62,7 +69,7 @@ export const deleteService = async (id: number) => {
 
 export const getServiceCount = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/salons/get-all-salons`);
+    const response = await axios.get(`${API_BASE_URL}/services/get-service-count`);
     return response.data;
   } catch (error) {
     console.error('Error fetching service count:', error);

@@ -1,31 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomTextArea, DeleteDialogBox, UpdateDialogBox } from '../../components/components';
 import { deleteIcon, editIcon, plusICon } from '../../assets/icons/icons';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store/store';
-import { getAllServices, createService, deleteService } from '../../redux/features/admin/service/serviceSlice';
-import withLoader from '../../components/Animation/WithLoader';
+import { createService, getAllServices, deleteService, getServiceById } from '../../api/serviceApi';
+import { Service, NewService } from '../../api/serviceApi';
+import { CircularProgress } from '@mui/material';
 
 const Services = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const serviceState = useSelector((state: RootState) => state.admin.services);
-
+  const [services, setServices] = useState<Service[]>([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const service_id = 13;
-
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<NewService>({
     name: '',
     serviceType: '',
     price: 0,
     duration: '',
   });
 
+  const fetchServices = async () => {
+    try {
+      setLoading(true);
+      const servicesData = await getAllServices();
+      setServices(servicesData);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    dispatch(getAllServices());
-  }, [dispatch]);
+    fetchServices();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -35,29 +45,77 @@ const Services = () => {
     });
   };
 
-  const handleSubmit = () => {
-    dispatch(createService(formData));
+  const handleSubmit = async () => {
+    try {
+      const newService = await createService(formData);
+      setServices([...services, newService]);
+      setIsFormVisible(false);
+      setFormData({ name: '', serviceType: '', price: 0, duration: '' });
+    } catch (error) {
+      console.error('Error creating service:', error);
+    }
   };
 
-  const handleDelete = () => {
-    dispatch(deleteService(service_id));
+  const handleDelete = async () => {
+    if (selectedServiceId !== null) {
+      try {
+        await deleteService(selectedServiceId);
+        setServices(services.filter((service) => service.id !== selectedServiceId));
+        setDeleteOpen(false);
+        setSelectedServiceId(null);
+      } catch (error) {
+        console.error('Error deleting service:', error);
+      }
+    }
   };
 
-  const handleDeleteOpen = () => {
+  // const handleUpdate = async () => {
+  //   if (selectedServiceId !== null) {
+  //     try {
+  //       const updatedService = await updateService(selectedServiceId, { id: selectedServiceId, ...formData });
+  //       setServices(services.map(service => (service.id === selectedServiceId ? updatedService : service)));
+  //       setUpdateOpen(false);
+  //       setSelectedServiceId(null);
+  //       setFormData({ name: '', serviceType: '', price: 0, duration: '' });
+  //     } catch (error) {
+  //       console.error('Error updating service:', error);
+  //     }
+  //   }
+  // };
+
+  const handleDeleteOpen = (id: number) => {
+    setSelectedServiceId(id);
     setDeleteOpen(true);
   };
 
-  // const handleDeleteClose = () => {
-  //   setDeleteOpen(false);
-  // };
-
-  const handleUpdateOpen = () => {
-    setUpdateOpen(true);
+  const handleUpdateOpen = async (id: number) => {
+    setSelectedServiceId(id);
+    try {
+      const serviceData = await getServiceById(id);
+      setFormData(serviceData);
+      setUpdateOpen(true);
+    } catch (error) {
+      console.error('Error fetching service by ID:', error);
+    }
   };
 
   const handleUpdateClose = () => {
     setUpdateOpen(false);
+    setSelectedServiceId(null);
+    setFormData({ name: '', serviceType: '', price: 0, duration: '' });
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center w-full min-h-screen">
+        <CircularProgress color="inherit" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="w-full h-screen overflow-auto">
@@ -118,7 +176,7 @@ const Services = () => {
                 ID
               </th>
               <th scope="col" className="px-6 py-3">
-                Servie name
+                Service name
               </th>
               <th scope="col" className="px-6 py-3">
                 Service type
@@ -136,7 +194,7 @@ const Services = () => {
             </tr>
           </thead>
           <tbody>
-            {serviceState.services.map((item) => (
+            {services.map((item) => (
               <tr key={item.id} className="bg-white border-b  hover:bg-gray-50 ">
                 <td className="px-6 py-4">{item.id}</td>
                 <td className="px-6 py-4">{item.name}</td>
@@ -144,8 +202,18 @@ const Services = () => {
                 <td className="px-6 py-4">{item.price}</td>
                 <td className="px-6 py-4">{item.duration}</td>
                 <td className="px-6 py-4 text-right flex justify-start items-center gap-2">
-                  <img src={editIcon} alt="edit icon" className="cursor-pointer" onClick={handleUpdateOpen} />
-                  <img src={deleteIcon} alt="delete icon" onClick={handleDeleteOpen} className="cursor-pointer" />
+                  <img
+                    src={editIcon}
+                    alt="edit icon"
+                    className="cursor-pointer"
+                    onClick={() => handleUpdateOpen(item.id)}
+                  />
+                  <img
+                    src={deleteIcon}
+                    alt="delete icon"
+                    onClick={() => handleDeleteOpen(item.id)}
+                    className="cursor-pointer"
+                  />
                 </td>
               </tr>
             ))}
@@ -156,29 +224,55 @@ const Services = () => {
         open={deleteOpen}
         onClick={handleDelete}
         title="Delete service"
-        text="You can't undo after delete. Are you sure, you want delete ?"
+        text="You can't undo after delete. Are you sure, you want delete?"
         buttonText="Delete"
       />
       <UpdateDialogBox
         open={updateOpen}
         handleClose={handleUpdateClose}
+        // onClick={handleUpdate}
         title="Update service"
         buttonText="Save"
-        children={
-          <>
-            <div className="flex justify-start items-center gap-4 py-2">
-              <CustomTextArea id="service_name" name="service_name" width="200px" text="Edit Service name" />
-              <CustomTextArea id="service_type" name="service_type" width="200px" text="Edit Service type" />
-            </div>
-            <div className="flex justify-start items-center gap-4 py-2">
-              <CustomTextArea id="price" name="price" width="200px" text="Edit Price" />
-              <CustomTextArea id="duration" name="duration" width="200px" text="Edit Duration" />
-            </div>
-          </>
-        }
-      />
+      >
+        <div className="flex justify-start items-center gap-4 py-2">
+          <CustomTextArea
+            id="service_name"
+            name="name"
+            width="200px"
+            text="Edit Service name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+          <CustomTextArea
+            id="service_type"
+            name="serviceType"
+            width="200px"
+            text="Edit Service type"
+            value={formData.serviceType}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="flex justify-start items-center gap-4 py-2">
+          <CustomTextArea
+            id="price"
+            name="price"
+            width="200px"
+            text="Edit Price"
+            value={formData.price.toString()}
+            onChange={handleChange}
+          />
+          <CustomTextArea
+            id="duration"
+            name="duration"
+            width="200px"
+            text="Edit Duration"
+            value={formData.duration}
+            onChange={handleChange}
+          />
+        </div>
+      </UpdateDialogBox>
     </div>
   );
 };
 
-export default withLoader(Services);
+export default Services;
