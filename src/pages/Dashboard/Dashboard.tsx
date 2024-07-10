@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import RegistrationChart from '../../components/Charts/RegistrationChart';
-//import { notificationIcon } from '../../assets/icons/icons';
-import withLoader from '../../components/Animation/WithLoader';
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState({
@@ -63,57 +61,26 @@ const Dashboard = () => {
     },
   ];
   return (
-    <div className="w-full h-screen overflow-hidden">
+    <div className="w-full h-screen overflow-auto px-10 py-6">
       <div className="text-[36px] text-font_secondary font-bold font-League uppercase">Dashboard</div>
       <div className="border-t border-[#C2C2C2]" />
 
-      <div className="flex h-full">
-        {/* Cards and charts */}
-        <div className="w-full h-full overflow-y-auto">
-          <div className="flex justify-between items-center flex-wrap gap-4 px-6 py-4">
-            {DASHBOARD_CARDS_DATA.map((item) => (
-              <StatusCard key={item.id} title={item.title} count={item.count} />
-            ))}
-          </div>
-          <div className="flex-col pb-24">
-            <RegistrationChart data={salonData} title="Salon Registrations" />
-            <RegistrationChart data={customerData} title="Customer Registrations" />
-          </div>
-        </div>
+      {/* Cards and charts */}
 
-        {/* Notifications */}
-        {/* <div className="w-[30%] border-l border-[#C2C2C2] pl-4 h-full overflow-y-auto">
-          <div className="text-[24px] text-font_secondary font-[500] py-4">Notifications</div>
-          
-          <div>
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-            <NotificationRow message="You have a bug that needs to be fixed" time="Just now" />
-          </div>
-        </div> */}
+      <div className="flex justify-between items-center flex-wrap gap-4 px-6 py-4">
+        {DASHBOARD_CARDS_DATA.map((item) => (
+          <StatusCard key={item.id} title={item.title} count={item.count} />
+        ))}
+      </div>
+      <div className="flex-col pb-24">
+        <RegistrationChart data={salonData} title="Salon Registrations" />
+        <RegistrationChart data={customerData} title="Customer Registrations" />
       </div>
     </div>
   );
 };
 
-export default withLoader(Dashboard);
+export default Dashboard;
 
 type StatusCardProps = {
   title: string;

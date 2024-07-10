@@ -11,6 +11,18 @@ export interface Review {
   salonId: number;
 }
 
+export interface Staff {
+  id: number;
+  name: string;
+  gender: string;
+  image?: string; // Image is optional
+}
+
+export interface SalonStaff {
+  staffId: number;
+  staff: Staff;
+}
+
 export interface Salon {
   id: number;
   name: string;
@@ -22,7 +34,9 @@ export interface Salon {
   contactNo: string;
   latitude: number;
   longitude: number;
+  image: string;
   review: Review[];
+  salonStaff: SalonStaff[]; // Array of SalonStaff objects
 }
 
 export const getAllSalons = async (): Promise<Salon[]> => {

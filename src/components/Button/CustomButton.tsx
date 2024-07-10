@@ -17,8 +17,8 @@ interface Props {
 
 const CustomButton: React.FC<Props> = ({
   type = 'button',
-  buttonColor = '#844704',
-  hoverColor = '#3A1F02',
+  buttonColor = '#2e2528',
+  hoverColor = '#C9A899',
   textColor = '#FFF',
   bold = '500',
   width,

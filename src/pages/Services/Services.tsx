@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomTextArea, DeleteDialogBox, UpdateDialogBox } from '../../components/components';
 import { deleteIcon, editIcon, plusICon } from '../../assets/icons/icons';
-import { createService, getAllServices, deleteService, getServiceById } from '../../api/serviceApi';
+import { createService, getAllServices, deleteService, getServiceById, updateService } from '../../api/serviceApi';
 import { Service, NewService } from '../../api/serviceApi';
 import { CircularProgress } from '@mui/material';
 
@@ -13,6 +13,7 @@ const Services = () => {
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   const [formData, setFormData] = useState<NewService>({
     name: '',
@@ -41,7 +42,7 @@ const Services = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: name === 'price' ? parseInt(value) : value,
+      [name]: name === 'price' || name === 'duration' ? parseInt(value) : value,
     });
   };
 
@@ -69,19 +70,23 @@ const Services = () => {
     }
   };
 
-  // const handleUpdate = async () => {
-  //   if (selectedServiceId !== null) {
-  //     try {
-  //       const updatedService = await updateService(selectedServiceId, { id: selectedServiceId, ...formData });
-  //       setServices(services.map(service => (service.id === selectedServiceId ? updatedService : service)));
-  //       setUpdateOpen(false);
-  //       setSelectedServiceId(null);
-  //       setFormData({ name: '', serviceType: '', price: 0, duration: '' });
-  //     } catch (error) {
-  //       console.error('Error updating service:', error);
-  //     }
-  //   }
-  // };
+  const handleUpdate = async () => {
+    if (selectedServiceId !== null) {
+      try {
+        const updatedService = await updateService(selectedServiceId, {
+          id: selectedServiceId,
+          ...formData,
+          duration: parseInt(formData.duration),
+        });
+        setServices(services.map((service) => (service.id === selectedServiceId ? updatedService : service)));
+        setUpdateOpen(false);
+        setSelectedServiceId(null);
+        setFormData({ name: '', serviceType: '', price: 0, duration: '' });
+      } catch (error) {
+        console.error('Error updating service:', error);
+      }
+    }
+  };
 
   const handleDeleteOpen = (id: number) => {
     setSelectedServiceId(id);
@@ -105,6 +110,11 @@ const Services = () => {
     setFormData({ name: '', serviceType: '', price: 0, duration: '' });
   };
 
+  const filteredServices =
+    selectedCategory === 'All' ? services : services.filter((service) => service.serviceType === selectedCategory);
+
+  const categories = Array.from(new Set(services.map((service) => service.serviceType)));
+
   if (loading) {
     return (
       <div className="flex items-center justify-center w-full min-h-screen">
@@ -114,11 +124,11 @@ const Services = () => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div className="flex items-center justify-center w-full min-h-screen">Error: {error.message}</div>;
   }
 
   return (
-    <div className="w-full h-screen overflow-auto">
+    <div className="w-full h-screen overflow-auto px-10 py-6">
       <div className="text-[36px] text-font_secondary font-bold">Services</div>
       <div className="border-t border-[#C2C2C2]" />
       <div className="py-4 w-full flex-col justify-start items-center">
@@ -165,107 +175,131 @@ const Services = () => {
           </>
         )}
 
-        <div className="border-t border-[#C2C2C2]" style={{ marginTop: '20px' }} />
+        <div className="border-t border-[#C2C2C2] mt-5" />
       </div>
-      <div className="pb-10">
-        <div className="text-[16px] text-font_secondary font-normal pb-4">List of all services available</div>
-        <table className="w-[90%] text-sm text-left  text-font_secondary">
-          <thead className="text-sm text-font_primary uppercase bg-secondary">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                ID
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Service name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Service type
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Price (Rs.)
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Duration
-              </th>
 
-              <th scope="col" className="px-6 py-3">
-                <span className="sr-only">Edit</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {services.map((item) => (
-              <tr key={item.id} className="bg-white border-b  hover:bg-gray-50 ">
-                <td className="px-6 py-4">{item.id}</td>
-                <td className="px-6 py-4">{item.name}</td>
-                <td className="px-6 py-4">{item.serviceType}</td>
-                <td className="px-6 py-4">{item.price}</td>
-                <td className="px-6 py-4">{item.duration}</td>
-                <td className="px-6 py-4 text-right flex justify-start items-center gap-2">
-                  <img
-                    src={editIcon}
-                    alt="edit icon"
-                    className="cursor-pointer"
-                    onClick={() => handleUpdateOpen(item.id)}
-                  />
-                  <img
-                    src={deleteIcon}
-                    alt="delete icon"
-                    onClick={() => handleDeleteOpen(item.id)}
-                    className="cursor-pointer"
-                  />
-                </td>
+      <div className="py-4 w-full flex-col justify-start items-center">
+        <div className="flex gap-4 pb-6">
+          <button
+            onClick={() => setSelectedCategory('All')}
+            className="px-4 py-2 bg-secondary text-white rounded-md hover:bg-primary hover:text-black"
+          >
+            All
+          </button>
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className="px-4 py-2 bg-secondary text-white rounded-md hover:bg-primary hover:text-black"
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+
+        <div>
+          <div className="text-[24px] text-font_secondary font-bold pb-4">{selectedCategory}</div>
+          <table className="w-[90%] text-sm text-left  text-font_secondary">
+            <thead className="text-sm text-font_primary uppercase bg-secondary">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  ID
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Service name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Service type
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Price (Rs.)
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Duration
+                </th>
+
+                <th scope="col" className="px-6 py-3">
+                  <span className="sr-only">Edit</span>
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  <span className="sr-only">Edit</span>
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredServices.map((service) => (
+                <tr key={service.id} className="bg-white border-b">
+                  <td className="px-6 py-4">{service.id}</td>
+                  <td className="px-6 py-4">{service.name}</td>
+                  <td className="px-6 py-4">{service.serviceType}</td>
+                  <td className="px-6 py-4">{service.price}</td>
+                  <td className="px-6 py-4">{service.duration}</td>
+                  <td className="px-6 py-4 text-right">
+                    <button className="text-blue-600 hover:text-blue-900" onClick={() => handleUpdateOpen(service.id)}>
+                      <img src={editIcon} alt="Edit icon" width={20} height={20} />
+                    </button>
+                    <button
+                      className="text-red-600 hover:text-red-900 ml-4"
+                      onClick={() => handleDeleteOpen(service.id)}
+                    >
+                      <img src={deleteIcon} alt="Delete icon" width={20} height={20} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+
       <DeleteDialogBox
         open={deleteOpen}
-        onClick={handleDelete}
+        handleClose={() => setDeleteOpen(false)}
+        onDelete={handleDelete}
         title="Delete service"
-        text="You can't undo after delete. Are you sure, you want delete?"
+        description="Are you sure you want to delete this service?"
         buttonText="Delete"
       />
+
       <UpdateDialogBox
         open={updateOpen}
         handleClose={handleUpdateClose}
-        // onClick={handleUpdate}
+        onClick={handleUpdate}
         title="Update service"
         buttonText="Save"
       >
         <div className="flex justify-start items-center gap-4 py-2">
           <CustomTextArea
-            id="service_name"
+            id="update_service_name"
             name="name"
-            width="200px"
-            text="Edit Service name"
+            width="100%"
+            text="Service name"
             value={formData.name}
             onChange={handleChange}
           />
           <CustomTextArea
-            id="service_type"
+            id="update_service_type"
             name="serviceType"
-            width="200px"
-            text="Edit Service type"
+            width="100%"
+            text="Service type"
             value={formData.serviceType}
             onChange={handleChange}
           />
         </div>
         <div className="flex justify-start items-center gap-4 py-2">
           <CustomTextArea
-            id="price"
+            id="update_price"
             name="price"
-            width="200px"
-            text="Edit Price"
+            width="100%"
+            text="Price"
             value={formData.price.toString()}
             onChange={handleChange}
           />
           <CustomTextArea
-            id="duration"
+            id="update_duration"
             name="duration"
-            width="200px"
-            text="Edit Duration"
+            width="100%"
+            text="Duration"
             value={formData.duration}
             onChange={handleChange}
           />

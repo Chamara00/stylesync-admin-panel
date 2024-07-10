@@ -6,6 +6,11 @@ export interface Customer {
   id: number;
   name: string;
   gender: string;
+  image: string;
+  contactNo: string;
+  isTemporary: boolean;
+  OTP: string;
+  isVerified: boolean;
   email: string;
   review: { salonId: number; value: number; date: string; time: string }[];
   customerAppointmentBlock: {

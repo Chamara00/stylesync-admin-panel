@@ -19,6 +19,7 @@ const ViewCustomer = () => {
           setLoading(true);
           const customerData = await getCustomerById(Number(id));
           setCustomer(customerData);
+          console.log(customerData);
         }
       } catch (err) {
         setError(err as Error);
@@ -52,7 +53,7 @@ const ViewCustomer = () => {
   }
 
   return (
-    <div className="w-full h-screen overflow-auto">
+    <div className="w-full h-screen overflow-auto px-10 py-6">
       <div className="text-[36px] text-font_secondary font-bold">Customer profile</div>
       <div className="border-t border-[#C2C2C2] mb-6" />
       <div className="flex justify-between items-center">
@@ -61,11 +62,21 @@ const ViewCustomer = () => {
           Delete profile
         </CustomButton>
       </div>
+
+      <div className="w-[150px] rounded-md">
+        <img
+          src={customer?.image ? customer.image : 'https://via.placeholder.com/150'}
+          alt=""
+          className="w-full rounded-md"
+        />
+      </div>
+
       <div className="flex justify-start items-center gap-4 py-2">
+        <CustomTextArea id="id" name="id" width="100px" text="Customer ID" disabled={true} value={customer?.id || ''} />
         <CustomTextArea
           id="name"
           name="name"
-          width="300px"
+          width="250px"
           text="Customer name"
           disabled={true}
           value={customer?.name || ''}
@@ -81,11 +92,22 @@ const ViewCustomer = () => {
         <CustomTextArea
           id="gender"
           name="gender"
-          width="150px"
+          width="100px"
           text="Gender"
           disabled={true}
-          value={customer?.gender || 'Female'}
+          value={customer?.gender || ''}
         />
+      </div>
+      <div className="flex justify-start items-center gap-4 py-2">
+        <CustomTextArea
+          id="contact_no"
+          name="contact_no"
+          width="200px"
+          text="Contact no"
+          disabled={true}
+          value={customer?.contactNo || ''}
+        />
+        <CustomTextArea id="otp" name="otp" width="100px" text="OTP" disabled={true} value={customer?.OTP || ''} />
       </div>
       <div className="border-t border-[#C2C2C2] my-6" />
       <TitleText text="Customer appointments" />
@@ -162,3 +184,6 @@ const ViewCustomer = () => {
 };
 
 export default ViewCustomer;
+
+// istemporray;
+// isverified;

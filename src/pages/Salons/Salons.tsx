@@ -30,26 +30,25 @@ const Salons: React.FC = () => {
 
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const currentRecords = salons?.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(salons ? salons.length : 0 / recordsPerPage);
+  const currentRecords = salons.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(salons.length / recordsPerPage);
+  const pageNumbers = [...Array(nPage + 1).keys()].slice(1);
 
-  const numbers = [...Array(nPage + 1).keys()].slice(1);
-
-  function prePage() {
-    if (currentPage !== firstIndex) {
+  const prePage = () => {
+    if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
-  }
+  };
 
-  function nextPage() {
-    if (currentPage !== lastIndex) {
+  const nextPage = () => {
+    if (currentPage < nPage) {
       setCurrentPage(currentPage + 1);
     }
-  }
+  };
 
-  function changeCurrentPage(id: number) {
+  const changeCurrentPage = (id: number) => {
     setCurrentPage(id);
-  }
+  };
 
   const handleRowClick = (salonId: number) => {
     navigate(`/admin/dashboard/salons/${salonId}`);
@@ -68,7 +67,7 @@ const Salons: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-screen overflow-auto">
+    <div className="w-full h-screen overflow-auto px-10 py-6">
       <div className="text-[36px] text-font_secondary font-bold">Salons</div>
       <div className="border-t border-[#C2C2C2]" />
       <div className="text-[16px] text-font_secondary font-normal py-4">List of all salons available</div>
@@ -94,7 +93,7 @@ const Salons: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {currentRecords.slice(firstIndex, lastIndex).map((item) => (
+            {currentRecords.map((item) => (
               <tr
                 key={item.id}
                 className="bg-white border-b  hover:bg-gray-50 "
@@ -120,12 +119,12 @@ const Salons: React.FC = () => {
                 Previous
               </a>
             </li>
-            {numbers.map((n, i) => (
-              <li key={i} className={`${currentPage === n ? 'active' : ''}`}>
+            {pageNumbers.map((n) => (
+              <li key={n} className={`${currentPage === n ? 'active' : ''}`}>
                 <a
                   href="#"
                   onClick={() => changeCurrentPage(n)}
-                  className={`flex items-center justify-center px-3 h-8 leading-tight text-font_secondary hover:text-gray-900   ${currentPage === n ? 'bg-primary' : ''}`}
+                  className={`flex items-center justify-center px-3 h-8 leading-tight text-font_secondary hover:text-gray-900   ${currentPage === n ? 'bg-primary text-white' : ''}`}
                 >
                   {n}
                 </a>
