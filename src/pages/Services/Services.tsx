@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomTextArea, DeleteDialogBox, UpdateDialogBox } from '../../components/components';
-import { deleteIcon, editIcon, plusICon } from '../../assets/icons/icons';
 import { createService, getAllServices, deleteService, getServiceById, updateService } from '../../api/serviceApi';
 import { Service, NewService } from '../../api/serviceApi';
 import { CircularProgress } from '@mui/material';
+import { IconPlus, IconTrash, IconEdit } from '@tabler/icons-react';
 
 const Services = () => {
   const [services, setServices] = useState<Service[]>([]);
@@ -133,7 +133,7 @@ const Services = () => {
       <div className="border-t border-[#C2C2C2]" />
       <div className="py-4 w-full flex-col justify-start items-center">
         <CustomButton width="200px" fontSize="16px" onClick={() => setIsFormVisible(!isFormVisible)}>
-          <img src={plusICon} alt="Plus icon" width={20} height={20} className="pr-2" /> Add new service
+          <IconPlus size={24} /> <span>Add new service</span>
         </CustomButton>
 
         {isFormVisible && (
@@ -236,13 +236,13 @@ const Services = () => {
                   <td className="px-6 py-4">{service.duration}</td>
                   <td className="px-6 py-4 text-right">
                     <button className="text-blue-600 hover:text-blue-900" onClick={() => handleUpdateOpen(service.id)}>
-                      <img src={editIcon} alt="Edit icon" width={20} height={20} />
+                      <IconEdit size={24} />
                     </button>
                     <button
                       className="text-red-600 hover:text-red-900 ml-4"
                       onClick={() => handleDeleteOpen(service.id)}
                     >
-                      <img src={deleteIcon} alt="Delete icon" width={20} height={20} />
+                      <IconTrash size={24} />
                     </button>
                   </td>
                 </tr>
