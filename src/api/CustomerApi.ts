@@ -43,11 +43,11 @@ export const getCustomerById = async (id: number) => {
   }
 };
 
-export const deleteCustomerById = async (id: number) => {
+export const deleteCustomer = async (id: number): Promise<void> => {
   try {
     await axios.delete(`${API_BASE_URL}/customer/delete-customer/${id}`);
   } catch (error) {
-    console.error('Error deleting customer by ID:', error);
+    console.error('Error deleting customer', error);
     throw error;
   }
 };
