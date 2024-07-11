@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomTextArea, TitleText } from '../../components/components';
 import { FaStar } from 'react-icons/fa6';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCustomerById, deleteCustomerById, Customer } from '../../api/CustomerApi';
+import { getCustomerById, Customer, deleteCustomer } from '../../api/CustomerApi';
 import { CircularProgress } from '@mui/material';
 
 const ViewCustomer = () => {
@@ -11,6 +11,7 @@ const ViewCustomer = () => {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     const getCustomer = async () => {
@@ -33,10 +34,13 @@ const ViewCustomer = () => {
 
   const handleDelete = async () => {
     try {
-      await deleteCustomerById(Number(id));
-      navigate('/admin/dashboard/customers');
+      if (id) {
+        await deleteCustomer(Number(id));
+        alert('Customer deleted successfully');
+        navigate('/admin/dashboard/customers');
+      }
     } catch (err) {
-      setError(err as Error);
+      setDeleteError('Failed to delete customer');
     }
   };
 
@@ -59,9 +63,11 @@ const ViewCustomer = () => {
       <div className="flex justify-between items-center">
         <TitleText text="Customer details" />
         <CustomButton width="150px" fontSize="16px" onClick={handleDelete}>
-          Delete profile
+          Delete {customer?.name}
         </CustomButton>
       </div>
+
+      {deleteError && <div className="text-red-500">{deleteError}</div>}
 
       <div className="w-[150px] rounded-md">
         <img

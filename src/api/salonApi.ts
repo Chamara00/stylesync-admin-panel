@@ -58,3 +58,12 @@ export const getSalonById = async (id: number): Promise<Salon> => {
     throw error;
   }
 };
+
+export const deleteSalon = async (id: number): Promise<void> => {
+  try {
+    await axios.delete(`${API_BASE_URL}/salons/delete-salon/${id}`);
+  } catch (error) {
+    console.error('Error deleting salon:', error);
+    throw error;
+  }
+};

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomTextArea, TitleText } from '../../components/components';
 //import withLoader from '../../components/Animation/WithLoader';
-import { useParams } from 'react-router-dom';
-import { getSalonById, Salon, SalonStaff } from '../../api/salonApi';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getSalonById, Salon, SalonStaff, deleteSalon } from '../../api/salonApi';
 import { CircularProgress } from '@mui/material';
 import { FaStar } from 'react-icons/fa6';
 
@@ -11,6 +11,8 @@ const ViewSalon = () => {
   const [salon, setSalon] = useState<Salon | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getSalon = async () => {
@@ -29,6 +31,18 @@ const ViewSalon = () => {
 
     getSalon();
   }, [id]);
+
+  const handleDelete = async () => {
+    try {
+      if (id) {
+        await deleteSalon(Number(id));
+        alert('Salon deleted successfully');
+        navigate('/admin/dashboard/salons');
+      }
+    } catch (err) {
+      setDeleteError((err as Error).message);
+    }
+  };
 
   if (loading) {
     return (
@@ -49,10 +63,12 @@ const ViewSalon = () => {
 
       <div className="flex justify-between items-center">
         <TitleText text="Salon details" />
-        <CustomButton width="150px" fontSize="16px">
-          Delete profile
+        <CustomButton width="200px" fontSize="16px" onClick={handleDelete}>
+          Delete {salon?.name}
         </CustomButton>
       </div>
+
+      {deleteError && <div className="text-red-500">{deleteError}</div>}
 
       <div className="w-[150px] rounded-md">
         <img
