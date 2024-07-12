@@ -113,10 +113,6 @@ const Dashboard = () => {
         </div>
         <CustomerChart />
       </div>
-      {/* <div className="flex-col pb-24">
-        <RegistrationChart data={salonData} title="Salon Registrations" />
-        <RegistrationChart data={customerData} title="Customer Registrations" />
-      </div> */}
     </div>
   );
 };
@@ -136,40 +132,3 @@ const StatusCard = ({ title, count }: StatusCardProps) => {
     </div>
   );
 };
-
-// type NotificationRowProps = {
-//   message: string;
-//   time: string;
-// };
-
-// const NotificationRow = ({ message, time }: NotificationRowProps) => {
-//   return (
-//     <div className="flex justify-start items-center py-2">
-//       <img src={notificationIcon} alt="Notification icon" className="pr-2" />
-//       <div className="flex-col justify-start items-start">
-//         <div className="text-[14px] font-light text-font_secondary">{message}</div>
-//         <div className=" text-[12px] font-extralight text-[#767676]">{time}</div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// const salonData = [
-//   { name: 'Mon', count: 100 },
-//   { name: 'Tue', count: 250 },
-//   { name: 'Wed', count: 150 },
-//   { name: 'Thu', count: 300 },
-//   { name: 'Fri', count: 244 },
-//   { name: 'Sat', count: 57 },
-//   { name: 'Sun', count: 174 },
-// ];
-
-// const customerData = [
-//   { name: 'Mon', count: 220 },
-//   { name: 'Tue', count: 300 },
-//   { name: 'Wed', count: 150 },
-//   { name: 'Thu', count: 278 },
-//   { name: 'Fri', count: 312 },
-//   { name: 'Sat', count: 57 },
-//   { name: 'Sun', count: 98 },
-// ];
