@@ -1,17 +1,18 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://stylesync-backend-test.onrender.com/admin';
+//const API_BASE_URL = 'https://stylesync-backend-test.onrender.com/admin';
+const API_BASE_URL = 'http://localhost:8000/admin';
 
 export interface Service {
   id: number;
-  name: string;
+  service: string;
   serviceType: string;
   price: number;
-  duration: number;
+  duration: string;
 }
 
 export interface NewService {
-  name: string;
+  service: string;
   serviceType: string;
   price: number;
   duration: string;
