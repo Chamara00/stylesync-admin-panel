@@ -37,7 +37,7 @@ const monthlySalonJoinDataset = [
   { month: 'Apr', count: 0 },
   { month: 'May', count: 0 },
   { month: 'Jun', count: 0 },
-  { month: 'Jul', count: 6 },
+  { month: 'Jul', count: 5 },
   { month: 'Aug', count: 0 },
   { month: 'Sep', count: 0 },
   { month: 'Oct', count: 0 },

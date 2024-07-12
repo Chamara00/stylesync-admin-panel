@@ -37,7 +37,7 @@ const monthlyCustomerJoinDataset = [
   { month: 'Apr', count: 0 },
   { month: 'May', count: 0 },
   { month: 'Jun', count: 0 },
-  { month: 'Jul', count: 4 },
+  { month: 'Jul', count: 2 },
   { month: 'Aug', count: 0 },
   { month: 'Sep', count: 0 },
   { month: 'Oct', count: 0 },

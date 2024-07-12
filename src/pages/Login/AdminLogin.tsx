@@ -3,8 +3,6 @@ import { CustomTextField, CustomButton } from '../../components/components';
 import { loginAnimation } from '../../assets/icons/icons';
 import { useNavigate } from 'react-router-dom';
 import { adminLogin } from '../../api/adminApi';
-// import mainTheme from '../../theme/theme';
-// import { CustomTextField } from '../../components/components';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -21,9 +19,9 @@ const AdminLogin = () => {
       console.log('Login successful');
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message); // Cast error to Error and get the message
+        setError(error.message);
       } else {
-        setError('An unknown error occurred.'); // Fallback for unknown error types
+        setError('An unknown error occurred.');
       }
       console.error('Login error:', error);
     }
@@ -42,13 +40,20 @@ const AdminLogin = () => {
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <p className="block text-font_secondary mb-2">Email</p>
-            <CustomTextField id="email" name="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <CustomTextField
+              id="email"
+              name="Email"
+              value={email}
+              width="450px"
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className="mb-6">
             <p className="block text-font_secondary mb-2">Password</p>
             <CustomTextField
               id="password"
               name="Password"
+              width="450px"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
