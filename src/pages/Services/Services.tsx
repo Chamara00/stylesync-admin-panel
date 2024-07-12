@@ -16,7 +16,7 @@ const Services = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   const [formData, setFormData] = useState<NewService>({
-    name: '',
+    service: '',
     serviceType: '',
     price: 0,
     duration: '',
@@ -42,7 +42,7 @@ const Services = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: name === 'price' || name === 'duration' ? parseInt(value) : value,
+      [name]: name === 'price' ? parseInt(value) : value,
     });
   };
 
@@ -51,7 +51,7 @@ const Services = () => {
       const newService = await createService(formData);
       setServices([...services, newService]);
       setIsFormVisible(false);
-      setFormData({ name: '', serviceType: '', price: 0, duration: '' });
+      setFormData({ service: '', serviceType: '', price: 0, duration: '' });
     } catch (error) {
       console.error('Error creating service:', error);
     }
@@ -76,12 +76,11 @@ const Services = () => {
         const updatedService = await updateService(selectedServiceId, {
           id: selectedServiceId,
           ...formData,
-          duration: parseInt(formData.duration),
         });
         setServices(services.map((service) => (service.id === selectedServiceId ? updatedService : service)));
         setUpdateOpen(false);
         setSelectedServiceId(null);
-        setFormData({ name: '', serviceType: '', price: 0, duration: '' });
+        setFormData({ service: '', serviceType: '', price: 0, duration: '' });
       } catch (error) {
         console.error('Error updating service:', error);
       }
@@ -107,7 +106,7 @@ const Services = () => {
   const handleUpdateClose = () => {
     setUpdateOpen(false);
     setSelectedServiceId(null);
-    setFormData({ name: '', serviceType: '', price: 0, duration: '' });
+    setFormData({ service: '', serviceType: '', price: 0, duration: '' });
   };
 
   const filteredServices =
@@ -139,7 +138,13 @@ const Services = () => {
         {isFormVisible && (
           <>
             <div className="flex justify-start items-center gap-4 py-2">
-              <CustomTextArea id="service_name" name="name" width="400px" text="Service name" onChange={handleChange} />
+              <CustomTextArea
+                id="service_name"
+                name="service"
+                width="400px"
+                text="Service name"
+                onChange={handleChange}
+              />
               <CustomTextArea
                 id="service_type"
                 name="serviceType"
@@ -230,7 +235,7 @@ const Services = () => {
               {filteredServices.map((service) => (
                 <tr key={service.id} className="bg-white border-b">
                   <td className="px-6 py-4">{service.id}</td>
-                  <td className="px-6 py-4">{service.name}</td>
+                  <td className="px-6 py-4">{service.service}</td>
                   <td className="px-6 py-4">{service.serviceType}</td>
                   <td className="px-6 py-4">{service.price}</td>
                   <td className="px-6 py-4">{service.duration}</td>
@@ -274,7 +279,7 @@ const Services = () => {
             name="name"
             width="100%"
             text="Service name"
-            value={formData.name}
+            value={formData.service}
             onChange={handleChange}
           />
           <CustomTextArea
