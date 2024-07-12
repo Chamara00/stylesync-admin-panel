@@ -51,6 +51,7 @@ const AdminLogin = () => {
           <div className="mb-6">
             <p className="block text-font_secondary mb-2">Password</p>
             <CustomTextField
+              type="password"
               id="password"
               name="Password"
               width="450px"

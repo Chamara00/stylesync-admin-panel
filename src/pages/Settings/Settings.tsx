@@ -1,5 +1,4 @@
 import React from 'react';
-import withLoader from '../../components/Animation/WithLoader';
 
 const Settings = () => {
   return (
@@ -10,4 +9,4 @@ const Settings = () => {
   );
 };
 
-export default withLoader(Settings);
+export default Settings;
